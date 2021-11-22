@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>encode</title>
+    <script type="text/javascript" src="../static/encode.js"></script>
+</head>
+<body>
+<p style="color: red">点击</p>
+</body>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">
+    function request(value) {
+        // 接口链接
+        var url = "http://127.0.0.1:8000/encode/";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8"); //设置参数格式
+        var data = encrypt_data(JSON.stringify(value));
+        xhr.send('data='+encodeURIComponent(data));
+        console.log(data)
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.getResponseHeader('content-type') === 'application/json') {
+                    var result = JSON.parse(xhr.responseText);
+                    // console.log(result);
+                } else {
+                    // console.log(xhr.responseText);
+                }
+            }
+        }
+    }
+
+    var time_in = new Date().getTime();
+
+    window.onclick = function (event) {
+        Function.prototype.constructor("debugger")();
+        var data = {
+            'url': location.href,
+            'times': (new Date().getTime() - time_in) / 1000,
+            'ip': returnCitySN["cip"],
+            'mark': {
+                "x": event.x,
+                "y": event.y,
+                "element": event.path[0].outerHTML.split(">")[0] + ">"
+            },
+            'userAgent': window.navigator.userAgent,
+        };
+        request(data);
+    };
+</script>
+</html>
